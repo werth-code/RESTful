@@ -2,6 +2,11 @@
     Index Page
 </h1>
 
-<h2>
-    <%=blogs%>
-</h2>
+    <% blogs.forEach( blog => { %>
+        <div>
+            <h2><%=blog.title%></h2>
+            <img src="<%= blog.image %>">
+            <p><%= blog.created %></p>
+            <p><%= blog.body %></p>
+        </div>
+    <% }) %>
