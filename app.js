@@ -34,6 +34,8 @@ Blog.create({
   body: "THIS IS A POST"
 });
 
+//INDEX ROUTE
+
 app.get("/", (req, res) => {
   res.redirect("/blogs");
 });
