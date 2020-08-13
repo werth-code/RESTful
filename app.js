@@ -47,6 +47,19 @@ app.get("/blogs", (req, res) => {
     })
 })
 
+//NEW ROUTE
+app.get("/blogs/new", (req, res) => {
+  res.render("new")
+})
+
+//CREATE ROUTE
+app.post("/blogs", (req, res) => {
+  Blog.create(req.body.blog, (err, newBlog) => {
+    if(err) res.render("new")
+    else res.redirect("/blogs")
+  })
+})
+
 
 app.listen(port, () =>
   console.log(`App listening at http://localhost:${port}`)
