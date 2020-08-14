@@ -1,4 +1,4 @@
-//App Config
+//App Config - Dependencies 
 
 const e = require('express');
 
@@ -75,6 +75,7 @@ app.get("/blogs/:id", (req, res) => {
 })
 
 //EDIT ROUTE
+
 app.get("/blogs/:id/edit", (req, res) => {
   Blog.findById(req.params.id, (err, foundBlog) => {
     if(err) res.redirect("/blogs")
@@ -83,10 +84,20 @@ app.get("/blogs/:id/edit", (req, res) => {
 })
 
 //UPDATE ROUTE
+
 app.put("/blogs/:id", (req, res) => {
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, (err, updatedBlog) => {
     if(err) res.redirect("/blogs")
     else res.redirect("/blogs/" + req.params.id)
+  })
+})
+
+//DELETE ROUTE
+
+app.delete("/blogs/:id", (req, res) => {
+  Blog.findByIdAndRemove(req.params.id, err => {
+    if(err) res.redirect("/blogs")
+    else res.redirect("/blogs");
   })
 })
 
