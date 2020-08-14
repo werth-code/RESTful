@@ -28,11 +28,11 @@ const Blog = mongoose.model("Blog", blogSchema)
 
 //RESTful Routes
 
-Blog.create({
-  title: "Test Blog",
-  image: "https://ichef.bbci.co.uk/news/1024/cpsprodpb/C271/production/_98677794_gettyimages-486869012.jpg",
-  body: "THIS IS A POST"
-});
+// Blog.create({
+//   title: "Test Blog",
+//   image: "https://ichef.bbci.co.uk/news/1024/cpsprodpb/C271/production/_98677794_gettyimages-486869012.jpg",
+//   body: "THIS IS A POST"
+// });
 
 //INDEX ROUTE
 
@@ -60,7 +60,20 @@ app.post("/blogs", (req, res) => {
   })
 })
 
+//SHOW ROUTE
+app.get("/blogs/:id", (req, res) => {
+  Blog.findById(req.params.id, (err, foundBlog) => {
+    if(err) console.log('ERROR')
+    else res.render("show.ejs", { blog: foundBlog })
+  })
+})
 
+//EDIT ROUTE
+app.get("/blogs/:id/edit", (req, res) => {
+  res.render("edit")
+})
+
+//LISTEN AT PORT..
 app.listen(port, () =>
   console.log(`App listening at http://localhost:${port}`)
 );
