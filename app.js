@@ -7,6 +7,7 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
       methodOverride = require('method-override'),
+      expressSanitizer = require('express-sanitizer'),
       port = 3000
 
       
@@ -20,6 +21,7 @@ app.set("view engine", "ejs")
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(methodOverride("_method"))
+app.use(expressSanitizer()) // This must go after body-parser!
 
 //Mongoose / Model Config
 
@@ -60,6 +62,9 @@ app.get("/blogs/new", (req, res) => {
 
 //CREATE ROUTE
 app.post("/blogs", (req, res) => {
+  console.log(req.body)
+  req.body.blog.body = req.sanitize(req.body.blog.body)
+  console.log(req.body);
   Blog.create(req.body.blog, (err, newBlog) => {
     if(err) res.render("new")
     else res.redirect("/blogs")
@@ -69,8 +74,8 @@ app.post("/blogs", (req, res) => {
 //SHOW ROUTE
 app.get("/blogs/:id", (req, res) => {
   Blog.findById(req.params.id, (err, foundBlog) => {
-    if(err) console.log('ERROR')
-    else res.render("show.ejs", { blog: foundBlog })
+    if(err) console.log('ERROR IN SHOW ROUTE')
+    else res.render("show.ejs", {blog: foundBlog})
   })
 })
 
@@ -86,6 +91,7 @@ app.get("/blogs/:id/edit", (req, res) => {
 //UPDATE ROUTE
 
 app.put("/blogs/:id", (req, res) => {
+  req.body.blog.body = req.sanitize(req.body.blog.body);
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, (err, updatedBlog) => {
     if(err) res.redirect("/blogs")
     else res.redirect("/blogs/" + req.params.id)
